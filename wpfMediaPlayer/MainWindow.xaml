@@ -1,0 +1,38 @@
+﻿<Window x:Class="wpfMediaPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:wpfMediaPlayer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:SecondsTimeSpanConverter x:Key="secondsTimeSpanConverter" />
+    </Window.Resources>
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Bottom">
+            <Button Click="Play">Play</Button>
+            <Button Click="Pause">Pause</Button>
+            <Button Click="Stop">Stop</Button>
+            <Label Content="Volume: "/>
+            <Slider Value="{Binding ElementName=clip, Path=Volume}" Maximum="1" Width="100"/>
+            <Label Content="Time: " />
+            <Slider Width="200" 
+                    x:Name="TimerSlider" 
+                    ValueChanged="TimerSlider_ValueChanged"
+                    Thumb.DragStarted="TimerSlider_DragStarted"
+                    Thumb.DragCompleted="TimerSlider_DragCompleted"
+                    />
+            <Label x:Name="timeOfWatchedVideo" Content="{Binding ElementName=TimerSlider, Path=Value , Converter={StaticResource secondsTimeSpanConverter}}"/>
+            <Label x:Name="totalTimeOfWatchedVideo" />
+        </WrapPanel>
+        <MediaElement Source="vid1.mp4" 
+                      Volume="0" 
+                      LoadedBehavior="Manual"
+                      x:Name="clip"
+                      Margin="0,0,0,20"
+                      MediaFailed="clip_MediaFailed"
+                      MediaOpened="clip_MediaOpened"
+                      />
+    </DockPanel>
+</Window>
