@@ -5,15 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wpfMediaPlayer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded" x:Name="mainWindow">
     <Window.Resources>
         <local:SecondsTimeSpanConverter x:Key="secondsTimeSpanConverter" />
+        <local:TwoValuesPercentageConverter x:Key="twoValuesPercentageConverter" />
     </Window.Resources>
     <DockPanel>
-        <WrapPanel DockPanel.Dock="Bottom">
-            <Button Click="Play">Play</Button>
-            <Button Click="Pause">Pause</Button>
-            <Button Click="Stop">Stop</Button>
+        <StackPanel DockPanel.Dock="Bottom" Width="{Binding ElementName=mainWindow, Path=Width}">
+            <StatusBarItem HorizontalAlignment="Center">
+                <Grid>
+                <ProgressBar Width="{Binding ElementName=mainWindow, Path=Width}" Height="15" Value="{Binding ElementName=TimerSlider, Path=Value}" Maximum="{Binding ElementName=TimerSlider, Path=Maximum}"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource twoValuesPercentageConverter}"
+                                          StringFormat=" {0:p}">
+                                <Binding ElementName="TimerSlider" Path="Value" />
+                                <Binding ElementName="TimerSlider" Path="Maximum" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Grid>
+            </StatusBarItem>
+        </StackPanel>
+        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <Button Click="Play" Margin="5,0,5,0">Play</Button>
+            <Button Click="Pause" Margin="5,0,5,0">Pause</Button>
+            <Button Click="Stop" Margin="5,0,5,0">Stop</Button>
             <Label Content="Volume: "/>
             <Slider Value="{Binding ElementName=clip, Path=Volume}" Maximum="1" Width="100"/>
             <Label Content="Time: " />
